@@ -1,8 +1,10 @@
 <h1 align="center">Cloudflare Access Verification Proxy</h1>
 <p align="center">
-  <img src="https://gitlab.com/arunesh90/CF-Access-verify/badges/master/pipeline.svg" />
   <img src="https://img.shields.io/github/languages/top/arunesh90/CF-Access-verify.svg" />
   <img src="https://img.shields.io/github/license/arunesh90/CF-Access-verify.svg" />
+  <img src="https://gitlab.com/arunesh90/CF-Access-verify/badges/master/pipeline.svg" />
+  <img src="https://images.microbadger.com/badges/image/arunesh90/cf-access-verify.svg" />
+  <img src="https://images.microbadger.com/badges/image/arunesh90/cf-access-verify.svg" />
 </p>
 
 > Simple reverse proxy that verifies all requests are done through Cloudflare Access and makes sure no unauthenticated users can access your application
@@ -17,9 +19,9 @@
 
 ### Docker
 ```sh
-docker pull registry.gitlab.com/arunesh90/CF-Access-verify
+docker pull arunesh90/cf-access-verify
 
-docker create \
+docker create arunesh90/cf-access-verify \
   -e TARGET_URL="http://127.0.0.1:9000" \
   -e LOGIN_DOMAIN="example.cloudflareaccess.com" \
   -p 80:80
