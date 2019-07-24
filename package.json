@@ -1,0 +1,26 @@
+{
+  "name": "cf-access-verify",
+  "version": "1.0.0",
+  "description": "Simple reverse proxy that's meant to be used to verify that all requests are done through Cloudflare Access and that they're valid",
+  "main": "src/main.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Arunesh <hello@arunesh.me>",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@types/jsonwebtoken": "^8.3.2",
+    "dotenv": "^8.0.0",
+    "http-proxy": "^1.17.0",
+    "jsonwebtoken": "^8.5.1",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^6.1.1",
+    "@types/http-proxy": "^1.17.0",
+    "@types/node": "^12.6.8",
+    "@types/node-fetch": "^2.5.0",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
+  }
+}
