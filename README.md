@@ -2,8 +2,8 @@
 <p align="center">
   <img src="https://img.shields.io/github/languages/top/arunesh90/CF-Access-verify.svg" />
   <img src="https://img.shields.io/github/license/arunesh90/CF-Access-verify.svg" />
-  <img src="https://gitlab.com/arunesh90/CF-Access-verify/badges/master/pipeline.svg" />
-  <img src="https://images.microbadger.com/badges/image/arunesh90/cf-access-verify.svg" />
+  <img src="https://img.shields.io/docker/cloud/automated/arunesh90/cf-access-verify.svg" />
+  <img src="https://img.shields.io/docker/cloud/build/arunesh90/cf-access-verify.svg" />
   <img src="https://images.microbadger.com/badges/image/arunesh90/cf-access-verify.svg" />
 </p>
 
