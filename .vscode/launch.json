@@ -20,7 +20,8 @@
       ],
       "sourceMaps"            : true,
       "cwd"                   : "${workspaceRoot}/src/",
-      "internalConsoleOptions": "openOnSessionStart"
+      "internalConsoleOptions": "openOnSessionStart",
+      "outputCapture": "std"
     }, {
       "type"   : "node",
       "request": "launch",

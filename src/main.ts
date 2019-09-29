@@ -3,29 +3,41 @@ import getKeys from './lib/getCerts'
 import http from 'http'
 import { verify as jwtVerify } from 'jsonwebtoken'
 import { createProxyServer } from 'http-proxy'
+import morgan from 'morgan'
+import cookie from 'cookie'
 
 getKeys().then((accessCerts) => {
+  console.log(`Successfully retrieved CF Access certs for ${process.env.LOGIN_DOMAIN}`)
+
   const proxyServer  = createProxyServer({toProxy: true, preserveHeaderKeyCase: true})
+  const logger       = morgan('combined')
   const customServer = http.createServer((req, res) => {
-    const { headers } = req
-    const token       = headers['cf-access-jwt-assertion'] as string
+    // @ts-ignore
+    logger(req, res, () => {
+      const { headers } = req
 
-    if (!token) {
-      res.writeHead(403, 'Missing CF Access token.')
-      res.end()
-      return
-    }
-
-    try {
-      jwtVerify(token, accessCerts.public_cert.cert)
-    } catch (_) {
-      res.writeHead(403, 'Invalid CF Access token.')
-      res.end()
-      return
-    }
-
-    proxyServer.web(req, res, {
-      target: process.env.TARGET_URL!
+      const cookieHeader = req.headers['cookie']
+      const cookieToken  = cookieHeader ? cookie.parse(cookieHeader)['CF_Authorization'] : null
+      const headerToken  = headers['cf-access-jwt-assertion'] as string
+      const token        = headerToken || cookieToken
+  
+      if (!token) {
+        res.writeHead(403, 'Missing CF Access token.')
+        res.end()
+        return
+      }
+  
+      try {
+        jwtVerify(token, accessCerts.public_cert.cert)
+      } catch (_) {
+        res.writeHead(403, 'Invalid CF Access token.')
+        res.end()
+        return
+      }
+  
+      proxyServer.web(req, res, {
+        target: process.env.TARGET_URL!
+      })
     })
   })
 
@@ -39,5 +51,5 @@ getKeys().then((accessCerts) => {
     console.log(`Listening on port ${httpPort}`)
   })
 }).catch((err) => {
-  console.log('Was unable to fetch the keys for you Cloudflare login domain', err)
+  console.log('Was unable to fetch the keys for your Cloudflare login domain', err)
 })
