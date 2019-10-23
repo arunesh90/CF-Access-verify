@@ -1,12 +1,19 @@
-FROM node:11-alpine
+# Build
+FROM node:12-alpine as build
 
 WORKDIR /app
 
-CMD [ "node", "main" ]
-
 COPY . /app
 
-RUN yarn global add typescript && yarn
-RUN echo "Compiling TypeScript.." && time tsc
+RUN yarn
+RUN echo "Compiling TypeScript.." && yarn build
+RUN rm -rf ./node_modules && yarn --production
+
+# Final image
+FROM node:12-alpine
 
 WORKDIR /app/dist
+
+COPY --from=build /app /app
+
+CMD [ "node", "main.js" ]
