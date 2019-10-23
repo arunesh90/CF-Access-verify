@@ -6,8 +6,8 @@ import { createProxyServer } from 'http-proxy'
 import morgan from 'morgan'
 import cookie from 'cookie'
 
-getKeys().then((accessCerts) => {
-  console.log(`Successfully retrieved CF Access certs for ${process.env.LOGIN_DOMAIN}`)
+const run = async () => {
+  let accessCerts = await getKeys()
 
   const proxyServer  = createProxyServer({toProxy: true, preserveHeaderKeyCase: true})
   const logger       = morgan('combined')
@@ -50,6 +50,11 @@ getKeys().then((accessCerts) => {
   customServer.listen(httpPort, () => {
     console.log(`Listening on port ${httpPort}`)
   })
-}).catch((err) => {
-  console.log('Was unable to fetch the keys for your Cloudflare login domain', err)
-})
+
+  // Regularly refresh access certs every hour
+  setInterval(async () => {
+    accessCerts = await getKeys()
+  }, 1000 * 60 * 60)
+}
+
+run()
