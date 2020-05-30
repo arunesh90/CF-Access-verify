@@ -1,6 +1,6 @@
 {
   "name": "cf-access-verify",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Simple reverse proxy that's meant to be used to verify that all requests are done through Cloudflare Access and that they're valid",
   "main": "src/main.ts",
   "scripts": {
