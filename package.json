@@ -8,7 +8,7 @@
     "build": "tsc"
   },
   "author": "Arunesh <hello@arunesh.me>",
-  "license": "UNLICENSED",
+  "license": "MIT",
   "dependencies": {
     "cookie": "^0.4.0",
     "dotenv": "^8.0.0",
