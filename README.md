@@ -21,7 +21,7 @@
 ```sh
 docker pull arunesh90/cf-access-verify
 
-docker create arunesh90/cf-access-verify \
+docker create arunesh90/cf-access-verify:1.1.0 \
   -e TARGET_URL="http://127.0.0.1:9000" \
   -e LOGIN_DOMAIN="example.cloudflareaccess.com" \
   -p 80:80
