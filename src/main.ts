@@ -1,10 +1,10 @@
 import 'dotenv/config'
 import getKeys from './lib/getCerts'
 import http from 'http'
-import { verify as jwtVerify } from 'jsonwebtoken'
 import { createProxyServer } from 'http-proxy'
 import morgan from 'morgan'
 import cookie from 'cookie'
+import { jwtAsyncVerify } from './lib/asyncVerify'
 
 const run = async () => {
   let accessCerts = await getKeys()
@@ -13,7 +13,7 @@ const run = async () => {
   const logger       = morgan('combined')
   const customServer = http.createServer((req, res) => {
     // @ts-ignore
-    logger(req, res, () => {
+    logger(req, res, async () => {
       const { headers } = req
 
       const cookieHeader = req.headers['cookie']
@@ -27,17 +27,19 @@ const run = async () => {
         return
       }
   
-      try {
-        jwtVerify(token, accessCerts.public_cert.cert)
-      } catch (_) {
-        res.writeHead(403, 'Invalid CF Access token.')
-        res.end()
+      const jwtChecks   = await Promise.all(accessCerts.public_certs.map(publicCert => jwtAsyncVerify(token, publicCert.cert)))
+      const passedCheck = jwtChecks.find(jwtPayload => jwtPayload && jwtPayload.iss === `https://${process.env.LOGIN_DOMAIN!}`)
+
+      if (passedCheck) {
+        proxyServer.web(req, res, {
+          target: process.env.TARGET_URL!
+        })
+
         return
       }
-  
-      proxyServer.web(req, res, {
-        target: process.env.TARGET_URL!
-      })
+
+      res.writeHead(403, 'Invalid CF Access token.')
+      res.end()
     })
   })
 
