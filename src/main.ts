@@ -49,7 +49,7 @@ const run = async () => {
   })
 
   const httpPort = process.env.PORT || 80
-  customServer.listen(httpPort, process.env.LISTEN, () => {
+  customServer.listen({host: process.env.LISTEN, port: httpPort}, () => {
     console.log(`Listening on port ${httpPort}`)
   })
 
