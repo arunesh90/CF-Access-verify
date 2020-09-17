@@ -56,7 +56,8 @@ const run = async () => {
 
   // Regularly refresh access certs every hour
   setInterval(async () => {
-    accessCerts = await getKeys()
+    const newCerts = await getKeys()
+    accessCerts = newCerts;
   }, 1000 * 60 * 60)
 }
 
