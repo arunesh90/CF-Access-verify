@@ -1,7 +1,7 @@
 import 'dotenv/config'
 import getKeys from './lib/getCerts'
 import http from 'http'
-import { createProxyServer } from 'http-proxy'
+import { createProxyServer, createServer } from 'http-proxy'
 import morgan from 'morgan'
 import cookie from 'cookie'
 import { jwtAsyncVerify } from './lib/asyncVerify'
@@ -9,7 +9,8 @@ import { jwtAsyncVerify } from './lib/asyncVerify'
 const run = async () => {
   let accessCerts = await getKeys()
 
-  const proxyServer  = createProxyServer({toProxy: true, preserveHeaderKeyCase: true})
+  const proxyServer  = createProxyServer({ws: true, toProxy: true, preserveHeaderKeyCase: true});
+  const wsServer     = createServer({target: 'ws://127.0.0.1:9001', ws: true})
   const logger       = morgan('combined')
   const customServer = http.createServer((req, res) => {
     // @ts-ignore
@@ -32,7 +33,7 @@ const run = async () => {
 
       if (passedCheck) {
         proxyServer.web(req, res, {
-          target: process.env.TARGET_URL!
+          target: `http://${process.env.TARGET_URL}`
         })
 
         return
@@ -46,7 +47,8 @@ const run = async () => {
   // Proxy WS
   customServer.on('upgrade', (req, socket, head) => {
     console.log(`Doing ws`);
-    proxyServer.ws(req, socket, head)
+    //proxyServer.ws(req, socket, head)
+    wsServer.ws(req, socket, head);
     console.log('Did ws')
   })
 
