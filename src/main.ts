@@ -31,7 +31,6 @@ const run = async () => {
       const passedCheck = jwtChecks.find(jwtPayload => jwtPayload && jwtPayload.iss === `https://${process.env.LOGIN_DOMAIN!}`)
 
       if (passedCheck) {
-        console.log(`Target: ${process.env.TARGET_URL!}`)
         proxyServer.web(req, res, {
           target: process.env.TARGET_URL!
         })
@@ -48,6 +47,7 @@ const run = async () => {
   customServer.on('upgrade', (req, socket, head) => {
     console.log(`Doing ws`);
     proxyServer.ws(req, socket, head)
+    console.log('Did ws')
   })
 
   const httpPort = process.env.PORT || 80
