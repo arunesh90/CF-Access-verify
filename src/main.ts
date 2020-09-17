@@ -10,7 +10,7 @@ const run = async () => {
   let accessCerts = await getKeys()
 
   const proxyServer  = createProxyServer({ws: true, toProxy: true, preserveHeaderKeyCase: true});
-  const wsServer     = createServer({target: 'ws://127.0.0.1:9001', ws: true})
+  const wsServer     = createServer({target: `ws://${process.env.TARGET_URL}`, ws: true})
   const logger       = morgan('combined')
   const customServer = http.createServer((req, res) => {
     // @ts-ignore
@@ -46,10 +46,7 @@ const run = async () => {
 
   // Proxy WS
   customServer.on('upgrade', (req, socket, head) => {
-    console.log(`Doing ws`);
-    //proxyServer.ws(req, socket, head)
     wsServer.ws(req, socket, head);
-    console.log('Did ws')
   })
 
   const httpPort = process.env.PORT || 80
