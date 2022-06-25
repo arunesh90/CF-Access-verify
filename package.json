@@ -14,7 +14,7 @@
     "http-proxy": "^1.18.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.9.1",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.7"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^8.3.2",
